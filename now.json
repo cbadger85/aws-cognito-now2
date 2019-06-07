@@ -1,0 +1,43 @@
+{
+  "name": "aws-cognito-now2",
+  "version": 2,
+  "builds": [
+    {
+      "src": "www/package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "build" }
+    },
+    { "src": "api/**/*.js", "use": "@now/node" }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/routes/$1"
+    },
+    {
+      "src": "/api/test/(.*)",
+      "methods": ["POST"],
+      "dest": "/api/routes/test?$1"
+    },
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "www/static/$1"
+    },
+    { "handle": "filesystem" },
+    { "src": "/favicon.ico", "dest": "www/favicon.ico" },
+    { "src": "/asset-manifest.json", "dest": "www/asset-manifest.json" },
+    { "src": "/manifest.json", "dest": "www/manifest.json" },
+    { "src": "/precache-manifest.(.*)", "dest": "www/precache-manifest.$1" },
+    {
+      "src": "/service-worker.js",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "www/service-worker.js"
+    },
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "www/index.html"
+    }
+  ]
+}
