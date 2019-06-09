@@ -1,4 +1,5 @@
 const app = require('../../utils/app');
+const { errorHandlers } = require('../../utils/handlers');
 
 app.get('*', (req, res) => {
   return res.json({
@@ -11,5 +12,7 @@ app.post('*/:example', (req, res) => {
     message: 'You successfully posted!',
   });
 });
+
+app.use(...errorHandlers);
 
 module.exports = app;
