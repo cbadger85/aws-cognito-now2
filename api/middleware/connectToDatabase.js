@@ -7,7 +7,7 @@ let isConnected;
 const connectToDatabase = (req, res, next) => {
   if (isConnected) {
     console.log('+++ Using existing database connection +++');
-    next();
+    return next();
   }
 
   console.log('+++ Using new database connection +++');
@@ -33,7 +33,7 @@ const connectToDatabase = (req, res, next) => {
     .then(db => {
       isConnected = db.connections[0].readyState;
       console.log('+++ Connection to CosmosDB successful +++');
-      next();
+      return next();
     })
     .catch(err => next(err));
 };
