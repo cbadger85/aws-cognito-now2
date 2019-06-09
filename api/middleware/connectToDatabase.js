@@ -4,10 +4,10 @@ mongoose.Promise = global.Promise;
 
 let isConnected;
 
-const connectToDatabase = () => {
+const connectToDatabase = (req, res, next) => {
   if (isConnected) {
     console.log('+++ Using existing database connection +++');
-    return Promise.resolve();
+    next();
   }
 
   console.log('+++ Using new database connection +++');
@@ -22,7 +22,7 @@ const connectToDatabase = () => {
     password: process.env.DB_PASS,
   };
 
-  return mongoose
+  mongoose
     .connect(cosmosDbConfig.connectionString, {
       useNewUrlParser: true,
       auth: {
@@ -33,8 +33,9 @@ const connectToDatabase = () => {
     .then(db => {
       isConnected = db.connections[0].readyState;
       console.log('+++ Connection to CosmosDB successful +++');
+      next();
     })
-    .catch(err => console.error(err));
+    .catch(err => next(err));
 };
 
 module.exports = connectToDatabase;

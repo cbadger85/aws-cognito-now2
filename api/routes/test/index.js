@@ -1,8 +1,8 @@
 const app = require('../../utils/app');
 const connectToDatabase = require('../../utils/connectToDatabase');
 
-app.get('*', async (req, res) => {
-  await connectToDatabase();
+app.get('*', (req, res) => {
+  console.log('this is after the db connection');
   return res.json({
     message: 'Hello World',
   });
