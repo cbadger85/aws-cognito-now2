@@ -37,13 +37,23 @@ app.post(
   '*',
   validateRegister,
   asyncErrorHandler(async (req, res) => {
-    const user = new User({
-      email: req.body.email,
-      name: req.body.name,
-      username: req.body.username,
+    const { email, name, username } = req.body;
+    const newUser = new User({
+      email,
+      name,
+      username,
     });
-    await User.register(user, req.body.password);
+
+    /*
+    TODO:   
+    destructure the fields you want out of the response add to a user object and send back in response.
+    */
+
+    const user = await User.register(newUser, req.body.password);
+    console.log(user);
+
     // TODO: send tokens back
+
     return res.json({
       message: 'You successfully registered!',
     });
