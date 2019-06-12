@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const app = require('../../../utils/app');
-const { errorHandlers } = require('../../../utils/handlers');
+const { errorHandlers, asyncErrorHandler } = require('../../../utils/handlers');
 require('../../../models/User');
 
 const User = mongoose.model('User');
@@ -30,23 +30,25 @@ const validateRegister = (req, res, next) => {
       error: errors,
     });
   }
-  next();
+  return next();
 };
 
-// TODO: remove username requirement from passport.js
-
-app.post('*', validateRegister, async (req, res) => {
-  const user = new User({
-    email: req.body.email,
-    name: req.body.name,
-    username: req.body.username,
-  });
-  await User.register(user, req.body.password);
-  // send tokens back
-  return res.json({
-    message: 'You successfully registered!',
-  });
-});
+app.post(
+  '*',
+  validateRegister,
+  asyncErrorHandler(async (req, res) => {
+    const user = new User({
+      email: req.body.email,
+      name: req.body.name,
+      username: req.body.username,
+    });
+    await User.register(user, req.body.password);
+    // TODO: send tokens back
+    return res.json({
+      message: 'You successfully registered!',
+    });
+  })
+);
 
 app.use(...errorHandlers);
 

@@ -13,12 +13,6 @@ const userSchema = new Schema({
     required: 'Please supply a name',
     trim: true,
   },
-  username: {
-    type: String,
-    required: 'Please supply a username',
-    unique: true,
-    trim: true,
-  },
   email: {
     type: String,
     required: 'Please supply an email address',
