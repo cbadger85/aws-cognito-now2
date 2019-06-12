@@ -33,6 +33,8 @@ const validateRegister = (req, res, next) => {
   next();
 };
 
+// TODO: remove username requirement from passport.js
+
 app.post('*', validateRegister, async (req, res) => {
   const user = new User({
     email: req.body.email,
@@ -40,6 +42,7 @@ app.post('*', validateRegister, async (req, res) => {
     username: req.body.username,
   });
   await User.register(user, req.body.password);
+  // send tokens back
   return res.json({
     message: 'You successfully registered!',
   });
