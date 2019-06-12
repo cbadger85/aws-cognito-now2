@@ -12,7 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "es6-promisify": "^6.0.1",
     "express": "^4.17.1",
-    "mongoose": "^5.5.14"
+    "express-validator": "^5.3.1",
+    "mongoose": "^5.5.14",
+    "mongoose-mongodb-errors": "0.0.2",
+    "passport": "^0.4.0",
+    "passport-local-mongoose": "^5.0.1",
+    "validator": "^11.0.0"
   }
 }

@@ -24,6 +24,7 @@ const connectToDatabase = async (req, res, next) => {
 
   const db = await mongoose.connect(cosmosDbConfig.connectionString, {
     useNewUrlParser: true,
+    useCreateIndex: true,
     auth: {
       user: cosmosDbConfig.user,
       password: cosmosDbConfig.password,
