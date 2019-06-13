@@ -7,6 +7,22 @@ const { Schema } = mongoose;
 
 mongoose.Promise = global.Promise;
 
+// TODO: add role, active to schema
+/* 
+findByUsername: function(model, queryParameters) {
+  queryParameters.active = true;
+  return model.findOne(queryParameters);
+}
+*/
+
+/*
+
+  Role types:
+    Admin
+    Editor
+    Author
+*/
+
 const userSchema = new Schema({
   name: {
     type: String,
@@ -20,6 +36,11 @@ const userSchema = new Schema({
     lowercase: true,
     trim: true,
     validate: [validator.isEmail, 'Invalid Email Address'],
+  },
+  role: {
+    type: String,
+    required: 'Please supply a role',
+    lowercase: true,
   },
 });
 

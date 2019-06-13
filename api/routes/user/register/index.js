@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const app = require('../../../utils/app');
 const { errorHandlers, asyncErrorHandler } = require('../../../utils/handlers');
@@ -37,25 +38,31 @@ app.post(
   '*',
   validateRegister,
   asyncErrorHandler(async (req, res) => {
-    const { email, name, username } = req.body;
     const newUser = new User({
-      email,
-      name,
-      username,
+      email: req.body.email,
+      name: req.body.name,
+      username: req.body.username,
+      role: req.body.username || 'author',
     });
 
-    /*
-    TODO:   
-    destructure the fields you want out of the response add to a user object and send back in response.
-    */
+    const { _id, username, name, password, role } = await User.register(
+      newUser,
+      req.body.password
+    );
 
-    const user = await User.register(newUser, req.body.password);
-    console.log(user);
+    // TODO: add roles
 
-    // TODO: send tokens back
+    const user = { _id, username, name, role };
+
+    const token = jwt.sign(user, process.env.SECRET, { expiresIn: 300 });
+    const refreshToken = jwt.sign(_id, process.env.SECRET2 + password, {
+      expiresIn: '168h',
+    });
 
     return res.json({
-      message: 'You successfully registered!',
+      token,
+      refreshToken,
+      user,
     });
   })
 );
